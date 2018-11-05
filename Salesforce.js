@@ -8,7 +8,7 @@
 const request = require('request').defaults({ gzip: true, json: true })
 const config = require('config')
 
-function Model (koop) {}
+function Salesforce (koop) {}
 
 // Public function to return data from the
 // Return: GeoJSON FeatureCollection
@@ -21,7 +21,7 @@ function Model (koop) {}
 // req.params.id  (if index.js:disableIdParam false)
 // req.params.layer
 // req.params.method
-Model.prototype.getData = function (req, callback) {
+Salesforce.prototype.getData = function (req, callback) {
   const key = config.trimet.key
 
   // Call the remote API with our developer key
@@ -71,7 +71,7 @@ function formatFeature (inputFeature) {
   return feature
 }
 
-module.exports = Model
+module.exports = Salesforce
 
 /* Example provider API:
    - needs to be converted to GeoJSON Feature Collection
