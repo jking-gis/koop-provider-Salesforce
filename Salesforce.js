@@ -60,10 +60,7 @@ Salesforce.prototype.getData = function (req, callback) {
     }
 
     request.get(requestOptions, (err, httpResponse, body) => {
-      if (err) {
-        console.log('query request failed: ' + err)
-        return
-      }
+      if (err) return callback(err)
       const geojson = translate(body)
       callback(null, geojson)
     })
