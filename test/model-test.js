@@ -9,10 +9,15 @@ const test = require('tape')
 const Model = require('../Salesforce')
 const model = new Model()
 const nock = require('nock')
+const config = require('../config')
 
 test('should properly fetch from the API and translate features', t => {
-  nock('https://developer.trimet.org')
-    .get('/ws/v2/vehicles/onRouteOnly/false/appid/8A0EBB788E8205888807BAC97')
+  nock(config.Salesforce.url)
+    .post('/oauth2/token')
+    .reply(200, require('./fixtures/auth.json'))
+
+  nock(config.Salesforce.url)
+    .get('/services/data/v30.0/query')
     .reply(200, require('./fixtures/input.json'))
 
   model.getData({}, (err, geojson) => {

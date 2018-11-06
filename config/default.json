@@ -1,5 +1,8 @@
 {
-  "trimet": {
-    "key": "8A0EBB788E8205888807BAC97"
+  "Salesforce": {
+    "clientId": "3MVG9zlTNB8o8BA331y41oVBIjDHU8.q6FuDeFTFwnWX91_r4B.FhNQ.I2xL5X03SLPsvyqdwkvfDbnpgmSnN",
+    "clientSecret": "2951537640707847381",
+    "securityToken": "8A0MvtijPPEURhFKgrAXPSLxu",
+    "url": "http://na59.salesforce.com"
   }
 }

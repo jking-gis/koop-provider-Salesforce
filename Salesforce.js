@@ -22,34 +22,55 @@ function Salesforce (koop) {}
 // req.params.layer
 // req.params.method
 Salesforce.prototype.getData = function (req, callback) {
-  const key = config.trimet.key
+  const clientSecret = config.Salesforce.clientSecret
+  const clientId = config.Salesforce.clientId
+  const securityToken = config.Salesforce.securityToken
+  const url = config.Salesforce.url
 
-  // Call the remote API with our developer key
-  request(`https://developer.trimet.org/ws/v2/vehicles/onRouteOnly/false/appid/${key}`, (err, res, body) => {
-    if (err) return callback(err)
+  const username = req.query.username ? req.query.username : ''
+  const password = req.query.password ? req.query.password : ''
 
-    // translate the response into geojson
-    const geojson = translate(body)
+  request.post({
+    url: url + '/oauth2/token',
+    form: {
+      grant_type: 'password',
+      client_id: clientId,
+      client_secret: clientSecret,
+      username: username,
+      password: password + securityToken
+    }
+  }, function (err, httpResponse, body) {
+    if (err) {
+      console.log('auth request failed: ' + err)
+      return
+    }
 
-    // Optional: cache data for 10 seconds at a time by setting the ttl or "Time to Live"
-    // geojson.ttl = 10
+    var accessToken = body.access_token
 
-    // Optional: Service metadata and geometry type
-    // geojson.metadata = {
-    //   title: 'Koop Sample Provider',
-    //   description: `Generated from ${url}`,
-    //   geometryType: 'Polygon' // Default is automatic detection in Koop
-    // }
+    request.get({
+      url: url + '/services/data/v30.0/query',
+      form: {
+        q: 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
+      },
+      auth: {
+        bearer: accessToken
+      }
+    }, function (err, httpResponse, body) {
+      if (err) {
+        console.log('query request failed: ' + err)
+        return
+      }
 
-    // hand off the data to Koop
-    callback(null, geojson)
+      const geojson = translate(body)
+      callback(null, geojson)
+    })
   })
 }
 
 function translate (input) {
   return {
     type: 'FeatureCollection',
-    features: input.resultSet.vehicle.map(formatFeature)
+    features: input.records.map(formatFeature)
   }
 }
 
@@ -60,14 +81,9 @@ function formatFeature (inputFeature) {
     properties: inputFeature,
     geometry: {
       type: 'Point',
-      coordinates: [inputFeature.longitude, inputFeature.latitude]
+      coordinates: [inputFeature.BillingLongitude, inputFeature.BillingLatitude]
     }
   }
-  // But we also want to translate a few of the date fields so they are easier to use downstream
-  const dateFields = ['expires', 'serviceDate', 'time']
-  dateFields.forEach(field => {
-    feature.properties[field] = new Date(feature.properties[field]).toISOString()
-  })
   return feature
 }
 
