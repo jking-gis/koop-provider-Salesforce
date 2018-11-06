@@ -12,11 +12,11 @@ const nock = require('nock')
 const config = require('config')
 
 test('should properly fetch from the API and translate features', t => {
-  nock(config.url)
+  nock(config.Salesforce.url)
     .post('/oauth2/token')
     .reply(200, require('./fixtures/auth.json'))
 
-  nock(config.url)
+  nock(config.Salesforce.url)
     .get('/services/data/v30.0/query')
     .reply(200, require('./fixtures/input.json'))
 

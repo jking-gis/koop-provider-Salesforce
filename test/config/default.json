@@ -1,3 +1,5 @@
 {
-  "url": "http://na59.salesforce.com"
+  "Salesforce": {
+    "url": "http://na59.salesforce.com"
+  }
 }
