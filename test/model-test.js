@@ -11,11 +11,11 @@ const model = new Model()
 const nock = require('nock')
 
 test('should properly fetch from the API and translate features', t => {
-  nock('http://salesforce.com')
+  nock('http://na59.salesforce.com')
     .post('/oauth2/token')
     .reply(200, require('./fixtures/auth.json'))
 
-  nock('http://salesforce.com')
+  nock('http://na59.salesforce.com')
     .get('/services/data/v30.0/query')
     .reply(200, require('./fixtures/input.json'))
 
