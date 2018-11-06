@@ -45,22 +45,22 @@ Salesforce.prototype.getData = function (req, callback) {
       return
     }
 
+    var accessToken = body.access_token
     console.log(body)
 
-    var accessToken = body.access_token
-
-    var requestOptions = {
-      url: url + '/services/data/v30.0/query',
-      form: {
-        q: 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
+    request.get(url + '/services/data/v30.0/query', {
+      'form': {
+        'q': 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
       },
-      auth: {
-        bearer: accessToken
+      'auth': {
+        'bearer': accessToken
       }
-    }
+    }, function (err, httpResponse, body) {
+      if (err) {
+        console.log('query request failed: ' + err)
+        return
+      }
 
-    request.get(requestOptions, (err, httpResponse, body) => {
-      if (err) return callback(err)
       const geojson = translate(body)
       callback(null, geojson)
     })
