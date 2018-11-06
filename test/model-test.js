@@ -9,14 +9,13 @@ const test = require('tape')
 const Model = require('../Salesforce')
 const model = new Model()
 const nock = require('nock')
-const config = require('config')
 
 test('should properly fetch from the API and translate features', t => {
-  nock(config.Salesforce.url)
+  nock('http://salesforce.com')
     .post('/oauth2/token')
     .reply(200, require('./fixtures/auth.json'))
 
-  nock(config.Salesforce.url)
+  nock('http://salesforce.com')
     .get('/services/data/v30.0/query')
     .reply(200, require('./fixtures/input.json'))
 
