@@ -5,7 +5,7 @@
 
   Documentation: http://koopjs.github.io/docs/specs/provider/
 */
-const request = require('request').defaults({ gzip: true, json: true })
+const request = require('request')
 const config = require('config')
 
 function Salesforce (koop) {}
@@ -49,19 +49,21 @@ Salesforce.prototype.getData = function (req, callback) {
 
     var accessToken = body.access_token
 
-    request.get(url + '/services/data/v30.0/query', {
-      'form': {
-        'q': 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
+    var requestOptions = {
+      url: url + '/services/data/v30.0/query',
+      form: {
+        q: 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
       },
-      'auth': {
-        'bearer': accessToken
+      auth: {
+        bearer: accessToken
       }
-    }, function (err, httpResponse, body) {
+    }
+
+    request.get(requestOptions, (err, httpResponse, body) => {
       if (err) {
         console.log('query request failed: ' + err)
         return
       }
-
       const geojson = translate(body)
       callback(null, geojson)
     })
