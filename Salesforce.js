@@ -53,7 +53,7 @@ Salesforce.prototype.getData = function (req, callback) {
         q: 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
       },
       auth: {
-        bearer: accessToken
+        Bearer: accessToken
       }
     }, function (err, httpResponse, body) {
       if (err) {
