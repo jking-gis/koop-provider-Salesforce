@@ -46,7 +46,6 @@ Salesforce.prototype.getData = function (req, callback) {
     }
 
     console.log(body)
-    console.log(httpResponse)
 
     var accessToken = body.access_token
 
