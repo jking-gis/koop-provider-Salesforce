@@ -47,13 +47,12 @@ Salesforce.prototype.getData = function (req, callback) {
 
     var accessToken = body.access_token
 
-    request.get({
-      url: url + '/services/data/v30.0/query',
-      form: {
-        q: 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
+    request.get(url + '/services/data/v30.0/query', {
+      'form': {
+        'q': 'SELECT+Name,+BillingLatitude,+BillingLongitude+from+Account'
       },
-      auth: {
-        Bearer: accessToken
+      'auth': {
+        'bearer': accessToken
       }
     }, function (err, httpResponse, body) {
       if (err) {
