@@ -9,7 +9,7 @@ const test = require('tape')
 const Model = require('../Salesforce')
 const model = new Model()
 const nock = require('nock')
-const config = require('../config')
+const config = require('config')
 
 test('should properly fetch from the API and translate features', t => {
   nock(config.Salesforce.url)
