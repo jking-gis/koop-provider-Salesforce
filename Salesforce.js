@@ -45,8 +45,10 @@ Salesforce.prototype.getData = function (req, callback) {
       return
     }
 
-    var accessToken = body.access_token
     console.log(body)
+    console.log(httpResponse)
+
+    var accessToken = body.access_token
 
     request.get(url + '/services/data/v30.0/query', {
       'form': {
