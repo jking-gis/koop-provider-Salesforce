@@ -3,6 +3,8 @@
     "clientId": "3MVG9zlTNB8o8BA331y41oVBIjDHU8.q6FuDeFTFwnWX91_r4B.FhNQ.I2xL5X03SLPsvyqdwkvfDbnpgmSnN",
     "clientSecret": "2951537640707847381",
     "securityToken": "KpOoDc0wiOt3BaKGZraKZQ7Np",
-    "url": "https://na59.salesforce.com"
+    "url": "https://na59.salesforce.com",
+    "username": "XXX",
+    "password": "XXX"
   }
 }
