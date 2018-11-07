@@ -22,6 +22,7 @@ function Salesforce (koop) {}
 // req.params.layer
 // req.params.method
 Salesforce.prototype.getData = function (req, callback) {
+  // Grab all the config data
   const clientSecret = config.Salesforce.clientSecret
   const clientId = config.Salesforce.clientId
   const securityToken = config.Salesforce.securityToken
@@ -30,6 +31,7 @@ Salesforce.prototype.getData = function (req, callback) {
   const password = (req.query && req.query.password) ? req.query.password : config.Salesforce.password
   const accountFields = config.Salesforce.accountFields
 
+  // Make the auth request
   request.post({
     url: url + '/services/oauth2/token',
     form: {
@@ -37,7 +39,7 @@ Salesforce.prototype.getData = function (req, callback) {
       client_id: clientId,
       client_secret: clientSecret,
       username: username,
-      password: password + securityToken
+      password: password + securityToken // append security token to password
     }
   }, function (err, httpResponse, body) {
     if (err) {
@@ -53,6 +55,7 @@ Salesforce.prototype.getData = function (req, callback) {
       }
     }
 
+    // build Account data request
     requestOptions.url += '?q=SELECT'
     accountFields.forEach(function (field, index) {
       requestOptions.url += `+${field}`
@@ -60,9 +63,11 @@ Salesforce.prototype.getData = function (req, callback) {
     })
     requestOptions.url += '+FROM+Account'
 
+    // Make the Account data request
     request.get(requestOptions, (err, httpResponse, body) => {
       if (err) return callback(err)
 
+      // Translate geojson
       const geojson = translate(body)
       geojson.metadata = {
         title: 'Koop Salesforce Provider',
@@ -74,6 +79,7 @@ Salesforce.prototype.getData = function (req, callback) {
         geometryType: 'Point' // Default is automatic detection in Koop
       }
 
+      // Return result for serving to ArcGIS
       callback(null, geojson)
     })
   })
@@ -90,11 +96,13 @@ function formatFeature (sum, inputFeature, index) {
   // Most of what we need to do here is extract the longitude and latitude
   const url = config.Salesforce.url
 
+  // Delete this property because it's a JSON object, but keep the url
   if (inputFeature.attributes) {
     inputFeature.url = url + inputFeature.attributes.url
     delete inputFeature.attributes
   }
 
+  // Make an objectID the index of the reduce function
   inputFeature.OBJECTID = index
 
   if (inputFeature.BillingLongitude && inputFeature.BillingLatitude) {
