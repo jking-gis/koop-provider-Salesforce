@@ -69,7 +69,7 @@ Salesforce.prototype.getData = function (req, callback) {
         name: 'Salesforce accounts',
         description: `Generated from ${url}`,
         displayField: 'Name',
-        idField: 'Id',
+        idField: 'OBJECTID',
         maxRecordCount: 10000,
         geometryType: 'Point' // Default is automatic detection in Koop
       }
@@ -82,11 +82,11 @@ Salesforce.prototype.getData = function (req, callback) {
 function translate (input) {
   return {
     type: 'FeatureCollection',
-    features: input.records.reduce(formatFeature, [])
+    features: input.records.reduce(formatFeature, [], 0)
   }
 }
 
-function formatFeature (sum, inputFeature) {
+function formatFeature (sum, inputFeature, index) {
   // Most of what we need to do here is extract the longitude and latitude
   const url = config.Salesforce.url
 
@@ -94,6 +94,8 @@ function formatFeature (sum, inputFeature) {
     inputFeature.url = url + inputFeature.attributes.url
     delete inputFeature.attributes
   }
+
+  inputFeature.OBJECTID = index
 
   if (inputFeature.BillingLongitude && inputFeature.BillingLatitude) {
     const feature = {
