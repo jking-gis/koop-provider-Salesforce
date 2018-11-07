@@ -12,7 +12,6 @@
       "Id",
       "BillingLatitude",
       "BillingLongitude",
-      "BillingAddress",
       "Phone",
       "Fax",
       "AccountNumber",

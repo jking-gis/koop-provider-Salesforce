@@ -88,6 +88,13 @@ function translate (input) {
 
 function formatFeature (sum, inputFeature) {
   // Most of what we need to do here is extract the longitude and latitude
+  const url = config.Salesforce.url
+
+  if (inputFeature.attributes) {
+    inputFeature.url = url + inputFeature.attributes.url
+    delete inputFeature.attributes
+  }
+
   if (inputFeature.BillingLongitude && inputFeature.BillingLatitude) {
     const feature = {
       type: 'Feature',
