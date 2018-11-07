@@ -27,7 +27,7 @@ Salesforce.prototype.getData = function (req, callback) {
   const securityToken = config.Salesforce.securityToken
   const url = config.Salesforce.url
   const username = (req.query && req.query.username) ? req.query.username : config.Salesforce.username
-  const password = (req.query && req.query.password) ? req.query.password : config.Salesfroce.password
+  const password = (req.query && req.query.password) ? req.query.password : config.Salesforce.password
 
   request.post({
     url: url + '/services/oauth2/token',
