@@ -17,7 +17,7 @@ test('should properly fetch from the API and translate features', t => {
     .reply(200, require('./fixtures/auth.json'))
 
   nock(config.Salesforce.url)
-    .get('/services/data/v30.0/query')
+    .get('/services/data/v30.0/query?q=SELECT+Name,+Id,+BillingLatitude,+BillingLongitude+from+Account')
     .reply(200, require('./fixtures/input.json'))
 
   model.getData({}, (err, geojson) => {
