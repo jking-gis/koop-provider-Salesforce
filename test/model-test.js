@@ -9,15 +9,21 @@ const test = require('tape')
 const Model = require('../Salesforce')
 const model = new Model()
 const nock = require('nock')
-const config = require('config')
+const config = require('../config/default.json')
 
 test('should properly fetch from the API and translate features', t => {
   nock(config.Salesforce.url)
     .post('/services/oauth2/token')
     .reply(200, require('./fixtures/auth.json'))
 
+  var queryUrl = '/services/data/v30.0/query?q=SELECT'
+  config.Salesforce.accountFields.forEach(function (field, index) {
+    queryUrl += `+${field}`
+    if (index < config.Salesforce.accountFields.length - 1) queryUrl += ','
+  })
+  queryUrl += '+FROM+Account'
   nock(config.Salesforce.url)
-    .get('/services/data/v30.0/query?q=SELECT+Name,+Id,+BillingLatitude,+BillingLongitude+from+Account')
+    .get(queryUrl)
     .reply(200, require('./fixtures/input.json'))
 
   model.getData({}, (err, geojson) => {

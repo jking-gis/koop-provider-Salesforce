@@ -28,6 +28,7 @@ Salesforce.prototype.getData = function (req, callback) {
   const url = config.Salesforce.url
   const username = (req.query && req.query.username) ? req.query.username : config.Salesforce.username
   const password = (req.query && req.query.password) ? req.query.password : config.Salesforce.password
+  const accountFields = config.Salesforce.accountFields
 
   request.post({
     url: url + '/services/oauth2/token',
@@ -46,11 +47,18 @@ Salesforce.prototype.getData = function (req, callback) {
 
     var accessToken = body.access_token
     var requestOptions = {
-      url: url + '/services/data/v30.0/query?q=SELECT+Name,+Id,+BillingLatitude,+BillingLongitude+from+Account',
+      url: url + '/services/data/v30.0/query',
       auth: {
         bearer: accessToken
       }
     }
+
+    requestOptions.url += '?q=SELECT'
+    accountFields.forEach(function (field, index) {
+      requestOptions.url += `+${field}`
+      if (index < accountFields.length - 1) requestOptions.url += ','
+    })
+    requestOptions.url += '+FROM+Account'
 
     request.get(requestOptions, (err, httpResponse, body) => {
       if (err) return callback(err)

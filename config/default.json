@@ -6,5 +6,11 @@
     "url": "https://na59.salesforce.com",
     "username": "XXX",
     "password": "XXX"
+    "accountFields": [
+      "Name",
+      "Id",
+      "BillingLatitude",
+      "BillingLongitude"
+    ]
   }
 }
