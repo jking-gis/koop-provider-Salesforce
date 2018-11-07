@@ -80,7 +80,7 @@ function translate (input) {
 
 function formatFeature (sum, inputFeature) {
   // Most of what we need to do here is extract the longitude and latitude
-  if(inputFeature.BillingLongitude && inputFeature.BillingLatitude) {
+  if (inputFeature.BillingLongitude && inputFeature.BillingLatitude) {
     const feature = {
       type: 'Feature',
       properties: inputFeature,

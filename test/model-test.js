@@ -13,7 +13,7 @@ const config = require('config')
 
 test('should properly fetch from the API and translate features', t => {
   nock(config.Salesforce.url)
-    .post('/oauth2/token')
+    .post('/services/oauth2/token')
     .reply(200, require('./fixtures/auth.json'))
 
   nock(config.Salesforce.url)
