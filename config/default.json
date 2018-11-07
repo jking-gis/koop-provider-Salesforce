@@ -5,12 +5,26 @@
     "securityToken": "KpOoDc0wiOt3BaKGZraKZQ7Np",
     "url": "https://na59.salesforce.com",
     "username": "XXX",
-    "password": "XXX"
+    "password": "XXX",
     "accountFields": [
       "Name",
+      "Type",
       "Id",
       "BillingLatitude",
-      "BillingLongitude"
+      "BillingLongitude",
+      "BillingAddress",
+      "Phone",
+      "Fax",
+      "AccountNumber",
+      "Website",
+      "PhotoUrl",
+      "AnnualRevenue",
+      "NumberOfEmployees",
+      "Description",
+      "Rating",
+      "Site",
+      "CreatedDate",
+      "LastModifiedDate"
     ]
   }
 }
