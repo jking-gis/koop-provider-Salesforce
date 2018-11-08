@@ -31,6 +31,8 @@ Salesforce.prototype.getData = function (req, callback) {
   const password = (req.query && req.query.password) ? req.query.password : config.Salesforce.password
   const accountFields = config.Salesforce.accountFields
 
+  console.log(req.query)
+
   // Make the auth request
   request.post({
     url: url + '/services/oauth2/token',
@@ -62,6 +64,9 @@ Salesforce.prototype.getData = function (req, callback) {
       if (index < accountFields.length - 1) requestOptions.url += ','
     })
     requestOptions.url += '+FROM+Account'
+    if (req.query && req.query.where && req.query.where != '1=1') {
+      requestOptions.url += '+WHERE+' + req.query.where
+    }
 
     // Make the Account data request
     request.get(requestOptions, (err, httpResponse, body) => {
@@ -85,6 +90,11 @@ Salesforce.prototype.getData = function (req, callback) {
   })
 }
 
+// TODO:
+// Allow filtering
+// URL to go back to Salesforce
+// Work for large datasets
+
 function translate (input) {
   return {
     type: 'FeatureCollection',
@@ -96,10 +106,13 @@ function formatFeature (sum, inputFeature, index) {
   // Most of what we need to do here is extract the longitude and latitude
   const url = config.Salesforce.url
 
-  // Delete this property because it's a JSON object, but keep the url
+  // Delete this property because it's a JSON object
   if (inputFeature.attributes) {
-    inputFeature.url = url + inputFeature.attributes.url
     delete inputFeature.attributes
+  }
+
+  if(inputFeature.id) {
+    inputFeature.url = url + '/lightning/r/Account/' + inputFeature.id + '/view'
   }
 
   // Make an objectID the index of the reduce function
