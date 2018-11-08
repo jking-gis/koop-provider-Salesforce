@@ -62,7 +62,7 @@ Salesforce.prototype.getData = function (req, callback) {
       if (index < accountFields.length - 1) requestOptions.url += ','
     })
     requestOptions.url += '+FROM+Account'
-    if (req.query && req.query.where && req.query.where != '1=1') {
+    if (req.query && req.query.where && req.query.where !== '1=1') {
       requestOptions.url += '+WHERE+' + req.query.where
     }
 
@@ -109,7 +109,7 @@ function formatFeature (sum, inputFeature, index) {
     delete inputFeature.attributes
   }
 
-  if(inputFeature.Id) {
+  if (inputFeature.Id) {
     inputFeature.url = url + '/lightning/r/Account/' + inputFeature.Id + '/view'
   }
 
