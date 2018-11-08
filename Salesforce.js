@@ -63,6 +63,7 @@ Salesforce.prototype.getData = function (req, callback) {
     })
     requestOptions.url += '+FROM+Account'
     if (req.query && req.query.where && req.query.where !== '1=1') {
+      req.query.where = req.query.where.replace(' AND (1=1)', '')
       requestOptions.url += '+WHERE+' + req.query.where
     }
 
