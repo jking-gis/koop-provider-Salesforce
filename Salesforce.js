@@ -96,7 +96,7 @@ Salesforce.prototype.getData = function (req, callback) {
 function translate (input) {
   return {
     type: 'FeatureCollection',
-    features: input.records.reduce(formatFeature, [], 0)
+    features: input.records ? input.records.reduce(formatFeature, [], 0) : []
   }
 }
 
@@ -109,12 +109,12 @@ function formatFeature (sum, inputFeature, index) {
     delete inputFeature.attributes
   }
 
-  if(inputFeature.id) {
-    inputFeature.url = url + '/lightning/r/Account/' + inputFeature.id + '/view'
+  if(inputFeature.Id) {
+    inputFeature.url = url + '/lightning/r/Account/' + inputFeature.Id + '/view'
   }
 
   // Make an objectID the index of the reduce function
-  inputFeature.OBJECTID = index
+  inputFeature.OBJECTID = index + 1
 
   if (inputFeature.BillingLongitude && inputFeature.BillingLatitude) {
     const feature = {
