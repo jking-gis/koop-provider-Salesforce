@@ -31,8 +31,6 @@ Salesforce.prototype.getData = function (req, callback) {
   const password = (req.query && req.query.password) ? req.query.password : config.Salesforce.password
   const accountFields = config.Salesforce.accountFields
 
-  console.log(req.query)
-
   // Make the auth request
   request.post({
     url: url + '/services/oauth2/token',
